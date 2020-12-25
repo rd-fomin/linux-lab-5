@@ -76,6 +76,7 @@ sudo df -h
 ```
 ![](images/image_2020-12-25_19-09-35.png)
 ![](images/image_2020-12-25_19-10-04.png)
+![](images/image_2020-12-25_19-44-48.png)
 ##### Создаём несколько файлов и делаем снимок
 ```
 sudo touch /mnt/file{1..5}
@@ -84,39 +85,38 @@ sudo lvcreate -L 100M -s -n snapsh /dev/vgmai/first
 sudo lvs
 sudo lsblk
 ```
-![](https://github.com/Pashayam/LinuxLab5/blob/main/images/17.png)
-![](https://github.com/Pashayam/LinuxLab5/blob/main/images/18.png)
+![](images/image_2020-12-25_19-49-21.png)
+![](images/image_2020-12-25_19-50-26.png)
 ##### Удаляем несколько файлов
 ```
 sudo rm -f /mnt/file{1..3}
 ls /mnt
 ```
-![](https://github.com/Pashayam/LinuxLab5/blob/main/images/19.png)
 ##### Монтируем снимок и проверяем, что файлы там есть. Отмонтируем.
 ```
 sudo mkdir /snap
-sudo mount /dev/mai/snapsh /snap
+sudo mount /dev/vgmai/snapsh /snap
 ls /snap
 sudo umount /snap
 ```
-![](https://github.com/Pashayam/LinuxLab5/blob/main/images/20.png)
+![](images/image_2020-12-25_19-58-55.png)
 ##### Отмонтируем файловую систему и производим слияние. Проверяем, что файлы на месте.
 ```
 sudo umount /mnt
-sudo lvconvert --merge /dev/mai/snapsh
-sudo mount /dev/mai/first /mnt
+sudo lvconvert --merge /dev/vgmai/snapsh
+sudo mount /dev/vgmai/first /mnt
 ls /mnt
 ```
-![](https://github.com/Pashayam/LinuxLab5/blob/main/images/21.png)
+![](images/image_2020-12-25_20-02-17.png)
 ##### Добавляем ещё PV, VG и создаём LV-зеркало.
 ```
 sudo pvcreate /dev/sd{d,e}
 sudo vgcreate vgmirror /dev/sd{d,e}
 sudo lvcreate -l+80%FREE -m1 -n mirror1 vgmirror
 ```
-![](https://github.com/Pashayam/LinuxLab5/blob/main/images/22.png)
+![](images/image_2020-12-25_20-05-21.png)
 ##### Наблюдаем синхронизацию.
 ```
 sudo lvs
 ```
-![](https://github.com/Pashayam/LinuxLab5/blob/main/images/23.png)
+![](images/image_2020-12-25_20-07-00.png)
